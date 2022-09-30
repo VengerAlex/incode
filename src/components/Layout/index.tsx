@@ -1,11 +1,13 @@
 import React from 'react';
 import "../../styles/index.scss";
 
-const Layout = ({children}: {children: React.ReactNode}) => {
+const Layout = ({children}: { children: React.ReactNode }) => {
     return (
-        <div className="layout">
-            <div className="container">
-                {children}
+        <div className="box">
+            <div className="layout">
+                <div className="container">
+                    {children}
+                </div>
             </div>
         </div>
     );

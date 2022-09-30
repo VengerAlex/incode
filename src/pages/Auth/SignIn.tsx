@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import {FC, useEffect} from 'react';
 import "../../styles/index.scss";
 import Input from "../../shared/UI/Input";
 import PasswordInput from "../../shared/UI/PasswordInput";
@@ -8,6 +8,9 @@ import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {login} from "../../redux/reducers/user/user.actions";
 import {useAppSelector} from "../../hooks/useAppSelector";
+import useFormFocus from "../../hooks/useFormFocus";
+import {getUserState} from "../../redux/reducers/user/userSlice";
+import localstorageService from "../../services/localstorage/localstorage.service";
 
 interface ISignIn {
     pageHandler: (page: PAGE) => void
@@ -19,24 +22,34 @@ interface ISignInForm {
 }
 
 const SignIn: FC<ISignIn> = ({pageHandler}) => {
-    const {isLoading, errorSignIn} = useAppSelector(state => state.user);
-    const {control, handleSubmit, formState: {errors}, reset} = useForm<ISignInForm>({mode: 'onChange'});
+    const {isLoading, errorSignIn} = useAppSelector(getUserState);
+    const {
+        control, handleSubmit,
+        formState: {errors, isValid, isSubmitSuccessful},
+        reset, setFocus
+    } = useForm<ISignInForm>({mode: 'onChange'});
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    const isAuth = localStorage.getItem("accessToken");
+    const isAuth = localstorageService.get("accessToken");
 
     const onSubmit = async (data: ISignInForm) => {
         dispatch(login({...data}))
 
-        reset()
+        isSubmitSuccessful && reset()
     }
 
-    const isDisabled = !!errors?.username?.type || !!errors?.password?.type;
+    useFormFocus(() => setFocus("username"))
 
-    if (isAuth){
-        navigate(ROUTES.Home)
-    }
+    useEffect(() => {
+        if (isAuth){
+            navigate(ROUTES.Home)
+        }
+    }, [])
+
+    console.log(errors)
+
+    const displayErrorHandler = (key: keyof ISignInForm, msg: string) => errors?.[key] && <p className="error">{msg}</p>;
 
     return (
         <div className="sign">
@@ -48,15 +61,15 @@ const SignIn: FC<ISignIn> = ({pageHandler}) => {
                     control={control}
                     title="User Name"
                 />
-                {errors?.username && <p className="error">Username is required and min length is 6</p>}
+                {displayErrorHandler("username", "Username is required and min length is 6")}
                 <PasswordInput
                     name="password"
                     control={control}
                     title="Password"
                 />
-                {errors?.password && <p className="error">Password must be at least 8 characters long</p>}
+                {displayErrorHandler("password", "Password must be at least 8 characters long")}
                 <button
-                    disabled={isDisabled}
+                    disabled={!isValid}
                     type="submit"
                     className="button sign__form-button">
                     {isLoading ? "LOADING" : "Sign Up"}

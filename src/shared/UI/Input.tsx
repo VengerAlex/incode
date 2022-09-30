@@ -3,7 +3,7 @@ import React, {FC} from 'react';
 interface IInput {
     title: string,
     control: any,
-    name: string,
+    name: string
 }
 
 const Input: FC<IInput> = ({title, control, name}) => {

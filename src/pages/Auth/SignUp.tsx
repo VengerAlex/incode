@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 
 import {PAGE, ROUTES} from "../../utils";
@@ -9,12 +9,14 @@ import {useForm} from "react-hook-form";
 import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {register} from "../../redux/reducers/user/user.actions";
 import {useAppSelector} from "../../hooks/useAppSelector";
+import useFormFocus from "../../hooks/useFormFocus";
+import {getUserState} from "../../redux/reducers/user/userSlice";
+import localstorageService from "../../services/localstorage/localstorage.service";
 
 interface ISignUp {
     pageHandler: (page: PAGE) => void
 }
-
-export interface ISignUpData {
+interface ISignUpForm {
     fullName: string,
     username: string,
     password: string,
@@ -24,26 +26,34 @@ export interface ISignUpData {
 const SignUp: FC<ISignUp> = ({pageHandler}) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const {isLoading, errorSignUp, user} = useAppSelector(state => state.user);
+    const isAuth = localstorageService.get("accessToken");
+    const {isLoading, errorSignUp} = useAppSelector(getUserState);
 
-    const isAuth = localStorage.getItem("accessToken");
-    const { control, handleSubmit, formState: { errors }, reset, watch} = useForm<ISignUpData>({mode: 'onChange'});
+    const { control, handleSubmit,
+        formState: { errors, isValid, isSubmitSuccessful },
+        reset, watch, setFocus
+    } = useForm<ISignUpForm>({mode: 'onChange'});
 
     const [password, confirmedPassword] = watch(["password", "confirmedPassword"])
     const isTheSamePassword = password === confirmedPassword;
 
-    const onSubmit = async (data: ISignUpData) => {
+    const onSubmit = async (data: ISignUpForm) => {
         const {username, password, fullName: displayName} = data;
 
         dispatch(register({username, password, displayName}))
 
-        reset()
+        isSubmitSuccessful && reset()
     }
 
+    useFormFocus(() => setFocus("fullName"))
 
-    if (isAuth || user){
-        navigate(ROUTES.Home)
-    }
+    useEffect(() => {
+        if (isAuth){
+            navigate(ROUTES.Home)
+        }
+    }, [])
+
+    const displayErrorHandler = (key: keyof ISignUpForm, msg: string) => errors?.[key] && <p className="error">{msg}</p>;
 
     return (
         <div className="sign" onSubmit={handleSubmit(onSubmit)}>
@@ -55,28 +65,28 @@ const SignUp: FC<ISignUp> = ({pageHandler}) => {
                     control={control}
                     title="Full Name"
                 />
-                {errors?.fullName && <p className="error">FullName is required and min length is 6</p>}
+                {displayErrorHandler("fullName", "FullName is required and min length is 6")}
                 <Input
                     name="username"
                     control={control}
                     title="User Name"
                 />
-                {errors?.username && <p className="error">Username is required and min length is 6</p>}
+                {displayErrorHandler("username", "Username is required and min length is 6")}
                 <PasswordInput
                     name="password"
                     control={control}
                     title="Password"
                 />
-                {errors?.password && <p className="error">Password must be at least 8 characters long</p>}
+                {displayErrorHandler("password", "Password must be at least 8 characters long")}
                 <PasswordInput
                     name="confirmedPassword"
                     control={control}
                     title="Confirm Password"
                 />
-                {errors?.confirmedPassword && <p className="error">Password must be at least 8 characters long</p>}
+                {displayErrorHandler("confirmedPassword", "Password must be at least 8 characters long")}
                 {!isTheSamePassword && <p className="error">Password should match</p>}
                 <button
-                    disabled={!isTheSamePassword}
+                    disabled={!isTheSamePassword || !isValid}
                     type="submit"
                     className="button sign__form-button">
                     {isLoading ? "Loading" : "Sign Up"}

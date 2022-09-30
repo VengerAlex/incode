@@ -15,8 +15,7 @@
 
 .layout {
   background-color: $bg-color;
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
 }
 
 .container {
@@ -24,6 +23,9 @@
   margin: 0 auto;
 }
 
+.box {
+  background-color: $bg-color;
+}
 
 // GLOBALL
 .title {
@@ -34,6 +36,10 @@
   background-color: $green-color;
   border: none;
   cursor: pointer;
+}
+button[disabled]{
+  cursor: default;
+  background-color: $disabled;
 }
 input {
   background-color: transparent;
@@ -53,14 +59,15 @@ input {
     font-size: 36px;
   }
 
-  & > span {
-    color: $green-color;
+  &__subtitle {
     font-weight: 600;
+    color: $green-color;
   }
 }
 
 //!GREETINGS
 .greetings {
+  background-color: $bg-color;
   text-align: center;
   padding: 78px 0;
   position: relative;
@@ -161,4 +168,18 @@ input {
 .error {
   padding-top: 5px;
   color: $error-color;
+}
+
+//!NOT-FOUND
+.not-found {
+  height: calc(100vh - 260px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  &__code {
+    font-size: 120px;
+    margin-bottom: 30px;
+  }
 }

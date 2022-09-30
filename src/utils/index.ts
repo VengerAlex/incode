@@ -1,6 +1,7 @@
 export enum ROUTES {
     Home = "/",
-    Auth = "/auth"
+    Auth = "/auth",
+    NotFound = "*"
 }
 
 export enum PAGE {

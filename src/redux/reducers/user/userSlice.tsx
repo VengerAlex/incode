@@ -2,6 +2,8 @@ import {createSlice} from "@reduxjs/toolkit";
 
 import {IUserInitialState} from "./user.interface";
 import {login, logout, register} from "./user.actions";
+import {RootState} from "../../index";
+import localstorageService from "../../../services/localstorage/localstorage.service";
 
 const initialState: IUserInitialState = {
     user: null,
@@ -22,7 +24,6 @@ const userSlice = createSlice({
             .addCase(register.fulfilled, (state, {payload}) => {
                 state.isLoading = false
 
-                console.log(payload, "PAYLOAD")
                 state.user = payload
                 state.errorSignUp = ""
                 state.errorSignIn = ""
@@ -38,8 +39,7 @@ const userSlice = createSlice({
             .addCase(login.fulfilled, (state, {payload}) => {
                 state.isLoading = false
 
-                localStorage.setItem("accessToken", payload.accessToken);
-                state.user = payload
+                localstorageService.set("accessToken", payload.accessToken);
                 state.errorSignUp = ""
                 state.errorSignIn = ""
             })
@@ -55,13 +55,15 @@ const userSlice = createSlice({
             .addCase(logout.fulfilled, (state, {payload}) => {
                 state.isLoading = false
                 state.user = null
-                localStorage.removeItem("accessToken")
+                localstorageService.remove("accessToken")
             })
             .addCase(logout.rejected, (state) => {
                 state.isLoading = false
             })
     }
 })
+
+export const getUserState = (state: RootState) => state.user;
 
 export const {} = userSlice.actions;
 export default userSlice.reducer;

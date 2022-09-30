@@ -1,7 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {IUserState} from "./user.interface";
 import AuthService from "../../../services/auth/auth.service";
-import {AxiosError} from "axios";
 
 interface IRegisterProps {
     username: string
