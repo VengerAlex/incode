@@ -11,6 +11,7 @@ import {useAppSelector} from "../../hooks/useAppSelector";
 import useFormFocus from "../../hooks/useFormFocus";
 import {getUserState} from "../../redux/reducers/user/userSlice";
 import localstorageService from "../../services/localstorage/localstorage.service";
+import {useActions} from "../../hooks/useActions";
 
 interface ISignIn {
     pageHandler: (page: PAGE) => void
@@ -22,19 +23,20 @@ interface ISignInForm {
 }
 
 const SignIn: FC<ISignIn> = ({pageHandler}) => {
+    const {login} = useActions()
+    const navigate = useNavigate();
     const {isLoading, errorSignIn} = useAppSelector(getUserState);
+    const isAuth = localstorageService.get("accessToken");
+
     const {
         control, handleSubmit,
         formState: {errors, isValid, isSubmitSuccessful},
         reset, setFocus
     } = useForm<ISignInForm>({mode: 'onChange'});
-    const navigate = useNavigate();
-    const dispatch = useAppDispatch();
 
-    const isAuth = localstorageService.get("accessToken");
 
     const onSubmit = async (data: ISignInForm) => {
-        dispatch(login({...data}))
+        login({...data})
 
         isSubmitSuccessful && reset()
     }

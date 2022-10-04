@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import {FC} from 'react';
 import {useNavigate} from "react-router-dom";
 
 import {PAGE, ROUTES} from "../../utils";
@@ -11,7 +11,7 @@ import {register} from "../../redux/reducers/user/user.actions";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import useFormFocus from "../../hooks/useFormFocus";
 import {getUserState} from "../../redux/reducers/user/userSlice";
-import localstorageService from "../../services/localstorage/localstorage.service";
+import {useActions} from "../../hooks/useActions";
 
 interface ISignUp {
     pageHandler: (page: PAGE) => void
@@ -25,9 +25,8 @@ interface ISignUpForm {
 }
 
 const SignUp: FC<ISignUp> = ({pageHandler}) => {
-    const dispatch = useAppDispatch();
+    const {register} = useActions();
     const navigate = useNavigate();
-    const isAuth = localstorageService.get("accessToken");
     const {isLoading, errorSignUp, user} = useAppSelector(getUserState);
 
     const {
@@ -42,7 +41,7 @@ const SignUp: FC<ISignUp> = ({pageHandler}) => {
     const onSubmit = async (data: ISignUpForm) => {
         const {username, password, fullName: displayName} = data;
 
-        dispatch(register({username, password, displayName}))
+        register({username, password, displayName})
 
         isSubmitSuccessful && reset()
     }

@@ -1,18 +1,18 @@
 import {Link, useNavigate} from "react-router-dom";
-import {useAppDispatch} from "../../hooks/useAppDispatch";
 
 import {ROUTES} from "../../utils";
 import {logout} from "../../redux/reducers/user/user.actions";
 
 import "../../styles/index.scss";
 import IMAGE from "../../assets/feedback-image.png";
+import {useActions} from "../../hooks/useActions";
 
 const Home = () => {
-    const dispatch = useAppDispatch();
+    const {logout} = useActions();
     const navigate = useNavigate();
 
     const logoutHandler = () => {
-        dispatch(logout())
+        logout();
 
         navigate(ROUTES.Auth)
     }
