@@ -52,10 +52,10 @@ const userSlice = createSlice({
             .addCase(logout.pending, (state) => {
                 state.isLoading = true
             })
-            .addCase(logout.fulfilled, (state, {payload}) => {
+            .addCase(logout.fulfilled, (state) => {
                 state.isLoading = false
                 state.user = null
-                localstorageService.remove("accessToken")
+                localstorageService?.remove("accessToken")
             })
             .addCase(logout.rejected, (state) => {
                 state.isLoading = false
@@ -65,5 +65,5 @@ const userSlice = createSlice({
 
 export const getUserState = (state: RootState) => state.user;
 
-export const {} = userSlice.actions;
+// export const {} = userSlice.actions;
 export default userSlice.reducer;

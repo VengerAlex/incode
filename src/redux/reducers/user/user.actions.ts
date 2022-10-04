@@ -38,6 +38,7 @@ export const login = createAsyncThunk<ILoginResponse, ILoginProps>(
 
             return response.data
         }  catch (error: any){
+            console.log(error)
             return thunkAPI.rejectWithValue(error.response.data.message)
         }
     }

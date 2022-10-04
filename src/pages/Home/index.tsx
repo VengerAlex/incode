@@ -1,4 +1,4 @@
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../hooks/useAppDispatch";
 
 import {ROUTES} from "../../utils";
@@ -19,6 +19,7 @@ const Home = () => {
 
     return (
         <section className="greetings">
+            <Link to={"/setting"}>CHANGE PASSWORD</Link>
            <h2 className="title greetings__title">Congratulations</h2>
            <p>Now you are on the main page. Soon we will provide you with detailed feedback on the result of your work</p>
            <button onClick={logoutHandler}  className="button">LogOut</button>

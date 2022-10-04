@@ -1,6 +1,6 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {ROUTES} from "../../utils";
-import {Navigate, useNavigate} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 interface IProtectedRoute {
     children: React.ReactNode,

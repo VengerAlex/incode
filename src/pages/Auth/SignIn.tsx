@@ -41,13 +41,9 @@ const SignIn: FC<ISignIn> = ({pageHandler}) => {
 
     useFormFocus(() => setFocus("username"))
 
-    useEffect(() => {
-        if (isAuth){
-            navigate(ROUTES.Home)
-        }
-    }, [])
-
-    console.log(errors)
+    if (isAuth){
+        navigate(ROUTES.Home)
+    }
 
     const displayErrorHandler = (key: keyof ISignInForm, msg: string) => errors?.[key] && <p className="error">{msg}</p>;
 

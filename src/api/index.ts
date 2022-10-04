@@ -2,9 +2,9 @@ import axios, {AxiosRequestConfig} from 'axios'
 
 export const getAuthUrl = (string: string) => `/auth/${string}`;
 
+
 const instance = axios.create({
-    baseURL: "https://incode-backend-dev.herokuapp.com",
-    headers: {'Content-Type': 'application/json'}
+    baseURL: process.env.REACT_APP_API_URL
 })
 
 instance.interceptors.request.use((config: AxiosRequestConfig) => {

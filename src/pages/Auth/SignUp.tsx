@@ -16,6 +16,7 @@ import localstorageService from "../../services/localstorage/localstorage.servic
 interface ISignUp {
     pageHandler: (page: PAGE) => void
 }
+
 interface ISignUpForm {
     fullName: string,
     username: string,
@@ -27,10 +28,11 @@ const SignUp: FC<ISignUp> = ({pageHandler}) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const isAuth = localstorageService.get("accessToken");
-    const {isLoading, errorSignUp} = useAppSelector(getUserState);
+    const {isLoading, errorSignUp, user} = useAppSelector(getUserState);
 
-    const { control, handleSubmit,
-        formState: { errors, isValid, isSubmitSuccessful },
+    const {
+        control, handleSubmit,
+        formState: {errors, isValid, isSubmitSuccessful},
         reset, watch, setFocus
     } = useForm<ISignUpForm>({mode: 'onChange'});
 
@@ -47,13 +49,12 @@ const SignUp: FC<ISignUp> = ({pageHandler}) => {
 
     useFormFocus(() => setFocus("fullName"))
 
-    useEffect(() => {
-        if (isAuth){
-            navigate(ROUTES.Home)
-        }
-    }, [])
+    if (user) {
+        navigate(ROUTES.Home)
+    }
 
-    const displayErrorHandler = (key: keyof ISignUpForm, msg: string) => errors?.[key] && <p className="error">{msg}</p>;
+    const displayErrorHandler = (key: keyof ISignUpForm, msg: string) => errors?.[key] &&
+        <p className="error">{msg}</p>;
 
     return (
         <div className="sign" onSubmit={handleSubmit(onSubmit)}>
@@ -91,7 +92,7 @@ const SignUp: FC<ISignUp> = ({pageHandler}) => {
                     className="button sign__form-button">
                     {isLoading ? "Loading" : "Sign Up"}
                 </button>
-                {errorSignUp &&  <p className="error">{errorSignUp}</p>}
+                {errorSignUp && <p className="error">{errorSignUp}</p>}
             </form>
 
             <div
