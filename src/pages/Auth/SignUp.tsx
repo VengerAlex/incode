@@ -6,7 +6,6 @@ import Input from "../../shared/UI/Input";
 import PasswordInput from "../../shared/UI/PasswordInput";
 
 import {useForm} from "react-hook-form";
-import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {register} from "../../redux/reducers/user/user.actions";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import useFormFocus from "../../hooks/useFormFocus";
@@ -38,7 +37,7 @@ const SignUp: FC<ISignUp> = ({pageHandler}) => {
     const [password, confirmedPassword] = watch(["password", "confirmedPassword"])
     const isTheSamePassword = password === confirmedPassword;
 
-    const onSubmit = async (data: ISignUpForm) => {
+    const onSubmit = (data: ISignUpForm) => {
         const {username, password, fullName: displayName} = data;
 
         register({username, password, displayName})

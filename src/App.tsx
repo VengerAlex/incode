@@ -3,8 +3,6 @@ import {Route, Routes} from "react-router-dom";
 
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
-import Layout from "./components/Layout";
-import Header from "./components/Header";
 
 import {ROUTES} from "./utils";
 import {useAppSelector} from "./hooks/useAppSelector";
@@ -18,18 +16,15 @@ const App: FC = () => {
     const isAuth = localstorageService.get("accessToken")
 
     return (
-        <Layout>
-            <Header/>
-            <Routes>
-                <Route path={ROUTES.Home} element={
-                    <ProtectedRoute isAllowed={!!isAuth || !!user}>
-                        <Home/>
-                    </ProtectedRoute>}
-                />
-                <Route path={ROUTES.Auth} element={<Auth/>}/>
-                <Route path={ROUTES.NotFound} element={<NotFound />} />
-            </Routes>
-        </Layout>
+        <Routes>
+            <Route path={ROUTES.Home} element={
+                <ProtectedRoute isAllowed={!!isAuth || !!user}>
+                    <Home/>
+                </ProtectedRoute>}
+            />
+            <Route path={ROUTES.Auth} element={<Auth/>}/>
+            <Route path={ROUTES.NotFound} element={<NotFound/>}/>
+        </Routes>
     );
 };
 

@@ -35,7 +35,7 @@ const SignIn: FC<ISignIn> = ({pageHandler}) => {
     } = useForm<ISignInForm>({mode: 'onChange'});
 
 
-    const onSubmit = async (data: ISignInForm) => {
+    const onSubmit = (data: ISignInForm) => {
         login({...data})
 
         isSubmitSuccessful && reset()
