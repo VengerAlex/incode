@@ -1,23 +1,9 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {IUserState} from "./user.interface";
+import {ILoginProps, ITokens, IRegisterProps, IRegisterResponse} from "./user.interface";
 import AuthService from "../../../services/auth/auth.service";
 
-interface IRegisterProps {
-    username: string
-    password: string
-    displayName: string
-}
 
-interface ILoginProps {
-    username: string
-    password: string
-}
-
-interface ILoginResponse {
-    "accessToken": string,
-    "refreshToken": string
-}
-export const register = createAsyncThunk<IUserState, IRegisterProps>(
+export const register = createAsyncThunk<IRegisterResponse, IRegisterProps>(
     "auth/register",
     async ({username, password, displayName}, thunkAPI) => {
         try {
@@ -30,7 +16,7 @@ export const register = createAsyncThunk<IUserState, IRegisterProps>(
     }
 )
 
-export const login = createAsyncThunk<ILoginResponse, ILoginProps>(
+export const login = createAsyncThunk<ITokens, ILoginProps>(
     "auth/login",
     async ({username, password}, thunkAPI) => {
         try {

@@ -1,4 +1,5 @@
 import axios, {getAuthUrl} from "../../api";
+import localstorageService from "../localstorage/localstorage.service";
 
 class AuthService {
     async login(username: string, password: string) {
@@ -6,6 +7,10 @@ class AuthService {
             getAuthUrl("login"),
             {username, password}
         )
+
+        if (response.data.accessToken){
+            localstorageService.set("accessToken", response.data.accessToken);
+        }
 
         return response
     }
@@ -21,6 +26,8 @@ class AuthService {
 
     async logout() {
         const response = await axios.get(getAuthUrl("logout"))
+
+        localstorageService?.remove("accessToken")
 
         return response
     }
