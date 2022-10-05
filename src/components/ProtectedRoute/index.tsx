@@ -1,19 +1,21 @@
 import React, {FC} from 'react';
 import {ROUTES} from "../../utils";
 import {Navigate} from "react-router-dom";
+import {useLocation, Outlet} from "react-router-dom";
 
 interface IProtectedRoute {
-    children: React.ReactNode,
-    isAllowed: boolean,
+    isAllowed?: boolean,
     redirectPath?: string
 }
 
 const ProtectedRoute: FC<IProtectedRoute> = (
-    {children, isAllowed, redirectPath= ROUTES.Auth}
+    {isAllowed, redirectPath = ROUTES.Auth}
 ) => {
-    if (!isAllowed) return <Navigate to={redirectPath} replace />
+    const location = useLocation();
 
-    return <>{children}</>
+    if (!isAllowed) return <Navigate to={redirectPath} state={{ from: location }} replace />
+
+    return <Outlet />
 };
 
 export default ProtectedRoute;

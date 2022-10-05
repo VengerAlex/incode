@@ -171,14 +171,14 @@ input {
 }
 
 //!NOT-FOUND
-.not-found {
+.error-found__page {
   height: calc(100vh - 260px);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 
-  &__code {
+  &-code {
     font-size: 120px;
     margin-bottom: 30px;
   }

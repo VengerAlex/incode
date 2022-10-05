@@ -1,14 +1,15 @@
-import {FC, useEffect} from 'react';
+import {FC} from 'react';
+import {useLocation, useNavigate} from "react-router-dom";
+
+import {useForm} from "react-hook-form";
+import useFormFocus from "../../hooks/useFormFocus";
+
 import "../../styles/index.scss";
 import Input from "../../shared/UI/Input";
 import PasswordInput from "../../shared/UI/PasswordInput";
 import {PAGE, ROUTES} from "../../utils";
-import {useForm} from "react-hook-form";
-import {useNavigate} from "react-router-dom";
-import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {login} from "../../redux/reducers/user/user.actions";
 import {useAppSelector} from "../../hooks/useAppSelector";
-import useFormFocus from "../../hooks/useFormFocus";
 import {getUserState} from "../../redux/reducers/user/userSlice";
 import localstorageService from "../../services/localstorage/localstorage.service";
 import {useActions} from "../../hooks/useActions";
@@ -23,10 +24,12 @@ interface ISignInForm {
 }
 
 const SignIn: FC<ISignIn> = ({pageHandler}) => {
+    const location = useLocation();
     const {login} = useActions()
     const navigate = useNavigate();
     const {isLoading, errorSignIn} = useAppSelector(getUserState);
     const isAuth = localstorageService.get("accessToken");
+    const from = location.state?.from?.pathname || ROUTES.Home;
 
     const {
         control, handleSubmit,
@@ -44,7 +47,7 @@ const SignIn: FC<ISignIn> = ({pageHandler}) => {
     useFormFocus(() => setFocus("username"))
 
     if (isAuth){
-        navigate(ROUTES.Home)
+        navigate(from, { replace: true });
     }
 
     const displayErrorHandler = (key: keyof ISignInForm, msg: string) => errors?.[key] && <p className="error">{msg}</p>;
