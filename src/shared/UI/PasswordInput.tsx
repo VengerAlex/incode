@@ -1,4 +1,4 @@
-import React, {FC, useState, ClipboardEvent} from 'react';
+import React, { FC, useState, ClipboardEvent } from "react";
 
 import hideEye from "../../assets/eye.svg";
 import showEye from "../../assets/eye-slash.svg";
@@ -6,43 +6,41 @@ import showEye from "../../assets/eye-slash.svg";
 import "../../styles/index.scss";
 
 interface IPasswordInput {
-    title: string,
-    control: any,
-    name: string
+  title: string;
+  control: any;
+  name: string;
 }
 
-const PasswordInput: FC<IPasswordInput> = ({title, control, name}) => {
-    const [showPassword, setShowPassword] = useState<boolean>(false);
+const PasswordInput: FC<IPasswordInput> = ({ title, control, name }) => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-    const pasteHandler = (event: ClipboardEvent<HTMLInputElement>) => {
-        event.preventDefault();
+  const pasteHandler = (event: ClipboardEvent<HTMLInputElement>) => {
+    event.preventDefault();
+  };
+  const inputTypeHandler = () => {
+    setShowPassword(!showPassword);
+  };
 
-        return
-    }
-    const inputTypeHandler = () => {
-        setShowPassword(!showPassword)
-    }
+  const INPUT_IMAGE = showPassword ? hideEye : showEye;
+  const INPUT_TYPE = showPassword ? "text" : "password";
 
-    const INPUT_IMAGE = showPassword ? hideEye : showEye;
-    const INPUT_TYPE = showPassword ? "text" : "password";
-
-    return (
-        <div className="input-box input-box--password">
-            <label htmlFor={name}>{title}</label>
-            <input
-                {...control.register(name, {required: true, minLength: 8})}
-                   onPaste={pasteHandler}
-                   type={INPUT_TYPE}
-                id={name}
-            />
-            <img
-                onClick={inputTypeHandler}
-                className={INPUT_IMAGE}
-                src={INPUT_IMAGE}
-                alt="icon"
-            />
-        </div>
-    );
+  return (
+    <div className="input-box input-box--password">
+      <label htmlFor={name}>{title}</label>
+      <input
+        {...control.register(name, { required: true, minLength: 8 })}
+        onPaste={pasteHandler}
+        type={INPUT_TYPE}
+        id={name}
+      />
+      <img
+        onClick={inputTypeHandler}
+        className={INPUT_IMAGE}
+        src={INPUT_IMAGE}
+        alt="icon"
+      />
+    </div>
+  );
 };
 
 export default PasswordInput;

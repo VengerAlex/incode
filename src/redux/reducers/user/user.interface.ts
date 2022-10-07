@@ -1,27 +1,27 @@
-export interface IRegisterResponse{
-    username: string
-    displayName: string
-    id: number
-    admin: boolean,
+export interface IRegisterResponse {
+  username: string
+  displayName: string
+  id: number
+  admin: boolean,
 }
 
 export interface ITokens {
-    "accessToken": string,
-    "refreshToken": string
+  "accessToken": string,
+  "refreshToken": string
 }
 
 export interface IUserInitialState {
-    user: IRegisterResponse | null
-    isLoading: boolean
-    errorSignIn: string
-    errorSignUp: string
+  user: IRegisterResponse | null
+  isLoading: boolean
+  errorSignIn: string
+  errorSignUp: string
 }
 
 export interface ILoginProps {
-    username: string
-    password: string
+  username: string
+  password: string
 }
 
-export interface IRegisterProps extends ILoginProps{
-    displayName: string
+export interface IRegisterProps extends ILoginProps {
+  displayName: string
 }

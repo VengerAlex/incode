@@ -1,9 +1,9 @@
-import {useEffect} from 'react';
+import { useEffect } from "react";
 
 const UseFormFocus = (cb: () => void) => {
-    useEffect(() => {
-        cb()
-    }, []);
+  useEffect(() => {
+    cb();
+  }, [cb]);
 };
 
 export default UseFormFocus;

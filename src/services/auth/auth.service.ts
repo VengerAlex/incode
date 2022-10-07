@@ -1,37 +1,37 @@
-import axios, {getAuthUrl} from "../../api";
+import axios, { getAuthUrl } from "../../api";
 import localstorageService from "../localstorage/localstorage.service";
-import {IRegisterResponse, ITokens} from "../../redux/reducers/user/user.interface";
+import { IRegisterResponse, ITokens } from "../../redux/reducers/user/user.interface";
 
 class AuthService {
-    async login(username: string, password: string) {
-        const response = await axios.post<ITokens>(
-            getAuthUrl("login"),
-            {username, password}
-        )
+  async login(username: string, password: string) {
+    const response = await axios.post<ITokens>(
+      getAuthUrl("login"),
+      { username, password },
+    );
 
-        if (response.data.accessToken){
-            localstorageService.set("accessToken", response.data.accessToken);
-        }
-
-        return response
+    if (response.data.accessToken) {
+      localstorageService.set("accessToken", response.data.accessToken);
     }
 
-    async register(username: string, password: string, displayName: string) {
-        const response = await axios.post<IRegisterResponse>(
-            getAuthUrl("register"),
-            {username, password, displayName}
-        )
+    return response;
+  }
 
-        return response
-    }
+  async register(username: string, password: string, displayName: string) {
+    const response = await axios.post<IRegisterResponse>(
+      getAuthUrl("register"),
+      { username, password, displayName },
+    );
 
-    async logout() {
-        const response = await axios.get(getAuthUrl("logout"))
+    return response;
+  }
 
-        localstorageService?.remove("accessToken")
+  async logout() {
+    const response = await axios.get(getAuthUrl("logout"));
 
-        return response
-    }
+    localstorageService?.remove("accessToken");
+
+    return response;
+  }
 }
 
 export default new AuthService();
